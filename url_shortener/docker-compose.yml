@@ -1,0 +1,32 @@
+services:
+  redis:
+    image: redis:alpine
+
+  shortener-service:
+    build: ./services/shortener-service
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_HOST=redis
+    depends_on:
+      - redis
+
+  redirect-service:
+    build: ./services/redirect-service
+    ports:
+      - "8001:8001"
+    environment:
+      - REDIS_HOST=redis
+    depends_on:
+      - redis
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NUXT_PUBLIC_SHORTENER_SERVICE_URL=http://localhost:8000
+      - NUXT_PUBLIC_REDIRECT_SERVICE_URL=http://localhost:8001
+    depends_on:
+      - shortener-service
+      - redirect-service 
