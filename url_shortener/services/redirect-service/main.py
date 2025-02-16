@@ -22,10 +22,23 @@ redis_client = redis.Redis(
     db=0
 )
 
-@app.get("/{short_code}")
+@app.get("/redirect/{short_code}")
 async def redirect_url(short_code: str):
     long_url = redis_client.get(short_code)
     if not long_url:
         raise HTTPException(status_code=404, detail="URL not found")
     
     return RedirectResponse(url=long_url.decode()) 
+
+@app.get("/health")
+async def health_check():
+    version = os.getenv("VERSION")
+    build_time = os.getenv("BUILD_TIME")
+    commit = os.getenv("COMMIT")
+    
+    return {
+        "status": "healthy",
+        "version": version,
+        "buildTime": build_time,
+        "commit": commit
+    }

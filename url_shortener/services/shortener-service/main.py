@@ -48,3 +48,16 @@ async def shorten_url(url_request: URLRequest):
         short_url=short_code,
         long_url=long_url
     ) 
+
+@app.get("/health")
+async def health_check():
+    version = os.getenv("VERSION")
+    build_time = os.getenv("BUILD_TIME")
+    commit = os.getenv("COMMIT")
+    
+    return {
+        "status": "healthy",
+        "version": version,
+        "buildTime": build_time,
+        "commit": commit
+    }

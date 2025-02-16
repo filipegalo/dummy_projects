@@ -57,6 +57,10 @@ jobs:
             ghcr.io/${{ github.repository }}/url-shortener/redirect-svc:${{ env.VERSION }}
           cache-from: type=gha,scope=url-shortener-redirect-service
           cache-to: type=gha,mode=max,scope=url-shortener-redirect-service
+          build-args: |
+            VERSION=${{ env.VERSION }}
+            BUILD_TIME=${{ github.event.head_commit.timestamp }}
+            COMMIT_SHA=${{ github.sha }}
 
       - name: "[Shortener-Service] Build and push image"
         uses: docker/build-push-action@v5
@@ -69,3 +73,7 @@ jobs:
             ghcr.io/${{ github.repository }}/url-shortener/shortener-svc:${{ env.VERSION }}
           cache-from: type=gha,scope=url-shortener-shortener-service
           cache-to: type=gha,mode=max,scope=url-shortener-shortener-service
+          build-args: |
+            VERSION=${{ env.VERSION }}
+            BUILD_TIME=${{ github.event.head_commit.timestamp }}
+            COMMIT_SHA=${{ github.sha }}

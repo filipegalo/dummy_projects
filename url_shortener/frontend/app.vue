@@ -131,7 +131,7 @@ const shortenUrl = async () => {
     if (!response.ok) throw new Error('Failed to shorten URL')
 
     const data = await response.json()
-    shortUrl.value = `${REDIRECT_SERVICE_URL}/${data.short_url}`
+    shortUrl.value = `${REDIRECT_SERVICE_URL}/redirect/${data.short_url}`
   } catch {
     error.value = 'Failed to shorten URL. Please try again.'
   } finally {
